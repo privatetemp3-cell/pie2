@@ -290,6 +290,7 @@ button{font-family:var(--pi-font-sans);cursor:pointer;border:none;background:non
 .pi-form-info-row p{font-size:13.5px;color:var(--fg-muted);line-height:1.55}
 .pi-form-info-row p strong{color:var(--fg)}
 .pi-form-privacy{font-size:11.5px;color:var(--fg-subtle);margin-top:16px;line-height:1.55}
+.pi-field-hint{font-size:11.5px;color:var(--fg-subtle);margin-top:5px;line-height:1.4}
 .pi-form-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--pi-r-xl);padding:32px;box-shadow:var(--pi-shadow-md)}
 .pi-form-card.highlighted{border-color:rgba(8,123,255,.6);box-shadow:var(--pi-glow)}
 .pi-consent{display:flex;align-items:flex-start;gap:10px;margin-bottom:18px}

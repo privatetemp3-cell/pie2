@@ -65,7 +65,7 @@ function WhyPi() {
 
 /* ─── Enquiry Form ────────────────────────────────── */
 function EnquiryForm({ selectedPackage }) {
-  const EMPTY = { name:'', whatsapp:'', business:'', purpose:'', pkg:'', email:'', website:'', timeframe:'', honeypot:'', consent:false };
+  const EMPTY = { name:'', email:'', phone:'', business:'', pkg:'', purpose:'', honeypot:'', consent:false };
   const [form, setForm] = React.useState(EMPTY);
   const [status, setStatus] = React.useState('idle'); // idle | ready | error
   const [errorMsg, setErrorMsg] = React.useState('');
@@ -89,34 +89,32 @@ function EnquiryForm({ selectedPackage }) {
   };
 
   const validate = () => {
-    if (!form.name.trim())     return 'Please enter your full name.';
-    if (!form.whatsapp.trim()) return 'Please enter your WhatsApp number.';
-    if (!form.business.trim()) return 'Please enter your business name.';
-    if (!form.pkg)             return 'Please select a package.';
-    if (!form.purpose.trim())  return 'Please describe your website purpose.';
-    if (!form.consent)         return 'Please agree to be contacted on WhatsApp to continue.';
+    if (!form.name.trim())    return 'Please enter your full name.';
+    if (!form.email.trim())   return 'Please enter your email address.';
+    if (!form.phone.trim())   return 'Please enter your phone number.';
+    if (!form.purpose.trim()) return 'Please describe your project briefly.';
+    if (!form.consent)        return 'Please agree to be contacted to continue.';
     return null;
   };
 
   const buildLink = (f) => {
-    const number = (document.querySelector('meta[name="wa-number"]') || {}).content || '447502116497';
-    const msg = [
-      "Hi pi, I'd like to start a website project.",
-      '', 'Name:',          f.name,
-      '', 'WhatsApp:',      f.whatsapp,
-      '', 'Business name:', f.business,
-      '', 'Package:',       f.pkg,
-      '', 'Website purpose:', f.purpose,
-      '', 'Existing website:', f.website || 'Not provided',
-      '', 'Ideal launch timeframe:', f.timeframe || 'Not provided',
-      '', 'Please contact me to arrange a discovery call.',
+    const email = (document.querySelector('meta[name="contact-email"]') || {}).content || 'hello@builtbypi.com';
+    const subject = 'Website enquiry' + (f.business ? ` — ${f.business}` : '');
+    const body = [
+      "Hi pi, I'd like to enquire about a website project.",
+      '', 'Name:',    f.name,
+      '', 'Email:',   f.email,
+      '', 'Phone:',   f.phone,
+      ...(f.business ? ['', 'Business name:', f.business] : []),
+      ...(f.pkg      ? ['', 'Package interest:', f.pkg]   : []),
+      '', 'Project brief:', f.purpose,
     ].join('\n');
-    return `https://wa.me/${number}?text=${encodeURIComponent(msg)}`;
+    return `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   };
 
   const fallbackLink = () => {
-    const number = (document.querySelector('meta[name="wa-number"]') || {}).content || '447502116497';
-    return `https://wa.me/${number}?text=${encodeURIComponent("Hi pi, I'd like to enquire about a website project.")}`;
+    const email = (document.querySelector('meta[name="contact-email"]') || {}).content || 'hello@builtbypi.com';
+    return `mailto:${email}?subject=${encodeURIComponent('Website enquiry')}`;
   };
 
   const handleSubmit = (e) => {
@@ -137,15 +135,17 @@ function EnquiryForm({ selectedPackage }) {
           {/* Left */}
           <FadeIn className="pi-form-left">
             <Eyebrow>Get in touch</Eyebrow>
-            <h2>Start your project</h2>
+            <h2>Get in touch</h2>
             <p>
-              Tell us what you need. We respond on WhatsApp to arrange a discovery call within
-              30 minutes during business hours.
+              Tell us briefly what you need. We'll reply to arrange a quick discovery call.
+            </p>
+            <p style={{ fontSize:14, color:'var(--fg-muted)', marginTop:-8 }}>
+              Keep it short — your name, contact details and what you need built are enough to start.
             </p>
             <div className="pi-form-info">
               <div className="pi-form-info-row">
-                <Icon name="message-square" size={15} />
-                <p><strong>WhatsApp enquiry</strong> — we respond within 30 minutes</p>
+                <Icon name="mail" size={15} />
+                <p><strong>Website enquiry</strong> — we'll reply to arrange a discovery call</p>
               </div>
               <div className="pi-form-info-row">
                 <Icon name="clock" size={15} />
@@ -153,11 +153,11 @@ function EnquiryForm({ selectedPackage }) {
               </div>
               <div className="pi-form-info-row">
                 <Icon name="info" size={15} />
-                <p>Outside hours? Send your enquiry now — we'll reply when we're back.</p>
+                <p>Send your enquiry any time — we'll reply during business hours.</p>
               </div>
             </div>
             <p className="pi-form-privacy">
-              Your details are used only to respond to your website enquiry on WhatsApp.
+              Your details are used only to respond to your website enquiry.
               This site does not store enquiry submissions.
             </p>
           </FadeIn>
@@ -168,18 +168,18 @@ function EnquiryForm({ selectedPackage }) {
               {status === 'ready' ? (
                 <div className="pi-form-success">
                   <div className="pi-form-success-icon">
-                    <Icon name="message-square" size={22} />
+                    <Icon name="mail" size={22} />
                   </div>
-                  <h3>Your enquiry is ready to send on WhatsApp.</h3>
+                  <h3>Enquiry ready to send.</h3>
                   <p>
-                    We'll respond to arrange a discovery call within 30 minutes
-                    during business hours.
+                    Your email client should have opened with your enquiry pre-filled.
+                    Send it to complete your submission — we'll be in touch to arrange a quick discovery call.
                   </p>
                   <div className="pi-form-success-actions">
                     <a href={waLink} target="_blank" rel="noopener noreferrer"
                       className="pi-btn pi-btn-primary pi-btn-lg">
-                      <Icon name="message-square" size={16} />
-                      Open WhatsApp
+                      <Icon name="mail" size={16} />
+                      Open email client
                       <Icon name="external-link" size={13} />
                     </a>
                     <button className="pi-btn pi-btn-secondary"
@@ -188,7 +188,7 @@ function EnquiryForm({ selectedPackage }) {
                     </button>
                   </div>
                   <p className="pi-form-success-fb">
-                    WhatsApp didn't open?{' '}
+                    Email client didn't open?{' '}
                     <a href={fallbackLink()} target="_blank" rel="noopener noreferrer">
                       Open directly
                     </a>
@@ -204,83 +204,63 @@ function EnquiryForm({ selectedPackage }) {
                     style={{ position:'absolute', top:'-9999px', left:'-9999px', opacity:0, pointerEvents:'none', width:1, height:1 }}
                   />
 
+                  <div className="pi-field">
+                    <label className="pi-label">Full name <span style={{ color:'var(--accent)' }}>*</span></label>
+                    <input className="pi-input" type="text" placeholder="Your name"
+                      value={form.name} onChange={e => set('name', e.target.value)} autoComplete="name" />
+                  </div>
+
                   <div className="pi-field-row">
                     <div className="pi-field">
-                      <label className="pi-label">Full name <span style={{ color:'var(--accent)' }}>*</span></label>
-                      <input className="pi-input" type="text" placeholder="Jane Smith"
-                        value={form.name} onChange={e => set('name', e.target.value)} autoComplete="name" />
+                      <label className="pi-label">Email address <span style={{ color:'var(--accent)' }}>*</span></label>
+                      <input className="pi-input" type="email" placeholder="you@example.com"
+                        value={form.email} onChange={e => set('email', e.target.value)} autoComplete="email" />
                     </div>
                     <div className="pi-field">
-                      <label className="pi-label">WhatsApp number <span style={{ color:'var(--accent)' }}>*</span></label>
-                      <input className="pi-input" type="tel" placeholder="+44 7700 000000"
-                        value={form.whatsapp} onChange={e => set('whatsapp', e.target.value)} autoComplete="tel" />
+                      <label className="pi-label">Phone number <span style={{ color:'var(--accent)' }}>*</span></label>
+                      <input className="pi-input" type="tel" placeholder="+44 7XXX XXXXXX"
+                        value={form.phone} onChange={e => set('phone', e.target.value)} autoComplete="tel" />
+                      <p className="pi-field-hint">Include your country code.</p>
                     </div>
-                  </div>
-
-                  <div className="pi-field">
-                    <label className="pi-label">Business name <span style={{ color:'var(--accent)' }}>*</span></label>
-                    <input className="pi-input" type="text" placeholder="Acme Ltd"
-                      value={form.business} onChange={e => set('business', e.target.value)} autoComplete="organization" />
-                  </div>
-
-                  <div className="pi-field">
-                    <label className="pi-label">Package interest <span style={{ color:'var(--accent)' }}>*</span></label>
-                    <select className="pi-input" value={form.pkg} onChange={e => set('pkg', e.target.value)}>
-                      <option value="" disabled>Select a package...</option>
-                      <option value="Landing Page — £120">Landing Page — £120</option>
-                      <option value="3 Page Website — £250">3 Page Website — £250</option>
-                      <option value="Curated Website — £650 plus">Curated Website — £650 plus</option>
-                      <option value="Not sure yet">Not sure yet</option>
-                    </select>
-                  </div>
-
-                  <div className="pi-field">
-                    <label className="pi-label">Website purpose / business description <span style={{ color:'var(--accent)' }}>*</span></label>
-                    <textarea className="pi-input" rows={4}
-                      placeholder="Briefly describe your business, what the website needs to do, and what customers should be able to enquire about or buy."
-                      value={form.purpose} onChange={e => set('purpose', e.target.value)}
-                      style={{ resize:'none' }} />
-                  </div>
-
-                  <div className="pi-field">
-                    <label className="pi-label">
-                      Email address{' '}
-                      <span style={{ color:'var(--fg-subtle)', textTransform:'none', letterSpacing:0, fontFamily:'var(--pi-font-sans)' }}>(optional)</span>
-                    </label>
-                    <input className="pi-input" type="email" placeholder="jane@acme.com"
-                      value={form.email} onChange={e => set('email', e.target.value)} autoComplete="email" />
                   </div>
 
                   <div className="pi-field-row">
                     <div className="pi-field">
                       <label className="pi-label">
-                        Existing website{' '}
+                        Business name{' '}
                         <span style={{ color:'var(--fg-subtle)', textTransform:'none', letterSpacing:0, fontFamily:'var(--pi-font-sans)' }}>(optional)</span>
                       </label>
-                      <input className="pi-input" type="url" placeholder="https://example.com"
-                        value={form.website} onChange={e => set('website', e.target.value)} />
+                      <input className="pi-input" type="text" placeholder="Your business name"
+                        value={form.business} onChange={e => set('business', e.target.value)} autoComplete="organization" />
                     </div>
                     <div className="pi-field">
                       <label className="pi-label">
-                        Launch timeframe{' '}
+                        Package interest{' '}
                         <span style={{ color:'var(--fg-subtle)', textTransform:'none', letterSpacing:0, fontFamily:'var(--pi-font-sans)' }}>(optional)</span>
                       </label>
-                      <select className="pi-input" value={form.timeframe} onChange={e => set('timeframe', e.target.value)}>
-                        <option value="" disabled>Select...</option>
-                        <option value="As soon as possible">As soon as possible</option>
-                        <option value="7 days">7 days</option>
-                        <option value="2 weeks">2 weeks</option>
-                        <option value="1 month">1 month</option>
-                        <option value="No fixed deadline">No fixed deadline</option>
+                      <select className="pi-input" value={form.pkg} onChange={e => set('pkg', e.target.value)}>
+                        <option value="">Select a package...</option>
+                        <option value="Landing Page — £120">Landing Page — £120</option>
+                        <option value="3 Page Website — £250">3 Page Website — £250</option>
+                        <option value="Curated Website — £650">Curated Website — £650</option>
+                        <option value="Not sure yet">Not sure yet</option>
                       </select>
                     </div>
+                  </div>
+
+                  <div className="pi-field">
+                    <label className="pi-label">Project brief <span style={{ color:'var(--accent)' }}>*</span></label>
+                    <textarea className="pi-input" rows={4}
+                      placeholder="Briefly describe your business and what you need the website to do."
+                      value={form.purpose} onChange={e => set('purpose', e.target.value)}
+                      style={{ resize:'none' }} />
                   </div>
 
                   <div className="pi-consent">
                     <input type="checkbox" id="consent" className="pi-checkbox"
                       checked={form.consent} onChange={e => set('consent', e.target.checked)} />
                     <label htmlFor="consent">
-                      I agree to be contacted on WhatsApp about my website enquiry.
+                      I agree to be contacted about my website enquiry.
                     </label>
                   </div>
 
@@ -292,12 +272,12 @@ function EnquiryForm({ selectedPackage }) {
                   )}
 
                   <button type="submit" className="pi-btn pi-btn-primary pi-btn-full" style={{ fontSize:15, padding:'14px 20px' }}>
-                    <Icon name="message-square" size={17} />
-                    Send via WhatsApp
+                    <Icon name="mail" size={17} />
+                    Send enquiry
                   </button>
 
                   <p style={{ textAlign:'center', fontSize:11.5, color:'var(--fg-subtle)', marginTop:12 }}>
-                    This opens WhatsApp with your details pre-filled. Nothing is stored on this site.
+                    This opens your email client with your details pre-filled. Nothing is stored on this site.
                   </p>
                 </form>
               )}
@@ -357,8 +337,6 @@ function FAQ() {
 
 /* ─── Footer ──────────────────────────────────────── */
 function Footer({ onContactClick }) {
-  const number = (document.querySelector('meta[name="wa-number"]') || {}).content || '447502116497';
-  const waLink = `https://wa.me/${number}?text=${encodeURIComponent("Hi pi, I'd like to enquire about a website project.")}`;
 
   const go = (href) => {
     const el = document.querySelector(href);
@@ -397,15 +375,10 @@ function Footer({ onContactClick }) {
             <p style={{ fontSize:13, color:'var(--fg-muted)', marginBottom:14, lineHeight:1.6 }}>
               Ready to build? Send us your project details on WhatsApp.
             </p>
-            <button className="pi-btn pi-btn-primary pi-btn-full" style={{ marginBottom:10 }} onClick={onContactClick}>
-              <Icon name="message-square" size={15} />
+            <button className="pi-btn pi-btn-primary pi-btn-full" onClick={onContactClick}>
+              <Icon name="mail" size={15} />
               Start a project
             </button>
-            <a href={waLink} target="_blank" rel="noopener noreferrer"
-              className="pi-btn pi-btn-secondary pi-btn-full">
-              <Icon name="message-square" size={15} />
-              WhatsApp directly
-            </a>
           </div>
         </div>
         <div className="pi-footer-bottom">

@@ -173,7 +173,7 @@ const PACKAGES = [
       'Launch support',
     ],
     cta: 'Choose Curated Site',
-    value: 'Curated Website — £650 plus',
+    value: 'Curated Website — £650',
     from: true,
     featured: true,
   },
