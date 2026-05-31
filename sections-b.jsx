@@ -67,9 +67,9 @@ function WhyPi() {
 function EnquiryForm({ selectedPackage }) {
   const EMPTY = { name:'', email:'', phone:'', business:'', pkg:'', purpose:'', honeypot:'', consent:false };
   const [form, setForm] = React.useState(EMPTY);
-  const [status, setStatus] = React.useState('idle'); // idle | ready | error
+  const [status, setStatus] = React.useState('idle'); // idle | submitting | ready | error
   const [errorMsg, setErrorMsg] = React.useState('');
-  const [waLink, setWaLink] = React.useState('');
+  const [submitFailed, setSubmitFailed] = React.useState(false);
   const [highlighted, setHighlighted] = React.useState(false);
   const timerRef = React.useRef(null);
 
@@ -85,47 +85,52 @@ function EnquiryForm({ selectedPackage }) {
 
   const set = (field, val) => {
     setForm(p => ({ ...p, [field]: val }));
-    if (status !== 'idle') { setStatus('idle'); setErrorMsg(''); }
+    if (status !== 'idle') { setStatus('idle'); setErrorMsg(''); setSubmitFailed(false); }
   };
 
   const validate = () => {
-    if (!form.name.trim())    return 'Please enter your full name.';
-    if (!form.email.trim())   return 'Please enter your email address.';
-    if (!form.phone.trim())   return 'Please enter your phone number.';
-    if (!form.purpose.trim()) return 'Please describe your project briefly.';
-    if (!form.consent)        return 'Please agree to be contacted to continue.';
+    if (!form.name.trim() || !form.email.trim() || !form.phone.trim() || !form.purpose.trim())
+      return 'Please complete your name, email, phone number and project brief.';
+    if (!form.consent)
+      return 'Please confirm that you agree to be contacted about your website enquiry.';
     return null;
   };
 
-  const buildLink = (f) => {
-    const email = (document.querySelector('meta[name="contact-email"]') || {}).content || 'hello@builtbypi.com';
-    const subject = 'Website enquiry' + (f.business ? ` — ${f.business}` : '');
-    const body = [
-      "Hi pi, I'd like to enquire about a website project.",
-      '', 'Name:',    f.name,
-      '', 'Email:',   f.email,
-      '', 'Phone:',   f.phone,
-      ...(f.business ? ['', 'Business name:', f.business] : []),
-      ...(f.pkg      ? ['', 'Package interest:', f.pkg]   : []),
-      '', 'Project brief:', f.purpose,
-    ].join('\n');
-    return `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  };
+  const FORM_ENDPOINT = 'https://formspree.io/f/xqejvkng';
 
-  const fallbackLink = () => {
-    const email = (document.querySelector('meta[name="contact-email"]') || {}).content || 'hello@builtbypi.com';
-    return `mailto:${email}?subject=${encodeURIComponent('Website enquiry')}`;
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (form.honeypot) return;
     const err = validate();
-    if (err) { setErrorMsg(err); setStatus('error'); return; }
-    const link = buildLink(form);
-    setWaLink(link);
-    setStatus('ready');
-    window.open(link, '_blank', 'noopener,noreferrer');
+    if (err) { setSubmitFailed(false); setErrorMsg(err); setStatus('error'); return; }
+    setStatus('submitting');
+    try {
+      const payload = {
+        name: form.name,
+        email: form.email,
+        phone: form.phone,
+        businessName: form.business || 'Not provided',
+        packageInterest: form.pkg || 'Not sure yet',
+        projectBrief: form.purpose,
+        source: 'builtbypi.com',
+        _subject: `New website enquiry from ${form.name}`,
+      };
+      const res = await fetch(FORM_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      if (res.ok) {
+        setStatus('ready');
+        setForm(EMPTY);
+      } else {
+        setSubmitFailed(true);
+        setStatus('error');
+      }
+    } catch {
+      setSubmitFailed(true);
+      setStatus('error');
+    }
   };
 
   return (
@@ -168,34 +173,19 @@ function EnquiryForm({ selectedPackage }) {
               {status === 'ready' ? (
                 <div className="pi-form-success">
                   <div className="pi-form-success-icon">
-                    <Icon name="mail" size={22} />
+                    <Icon name="check-circle" size={22} />
                   </div>
-                  <h3>Enquiry ready to send.</h3>
+                  <h3>Enquiry sent.</h3>
                   <p>
-                    Your email client should have opened with your enquiry pre-filled.
-                    Send it to complete your submission — we'll be in touch to arrange a quick discovery call.
+                    Your enquiry has been sent. We'll reply by email to arrange a quick discovery call.
                   </p>
-                  <div className="pi-form-success-actions">
-                    <a href={waLink} target="_blank" rel="noopener noreferrer"
-                      className="pi-btn pi-btn-primary pi-btn-lg">
-                      <Icon name="mail" size={16} />
-                      Open email client
-                      <Icon name="external-link" size={13} />
-                    </a>
-                    <button className="pi-btn pi-btn-secondary"
-                      onClick={() => { setStatus('idle'); setForm(EMPTY); }}>
-                      Start over
-                    </button>
-                  </div>
-                  <p className="pi-form-success-fb">
-                    Email client didn't open?{' '}
-                    <a href={fallbackLink()} target="_blank" rel="noopener noreferrer">
-                      Open directly
-                    </a>
-                  </p>
+                  <button className="pi-btn pi-btn-secondary"
+                    onClick={() => setStatus('idle')}>
+                    Send another enquiry
+                  </button>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} noValidate>
+                <form onSubmit={handleSubmit} noValidate style={status === 'submitting' ? { opacity:0.65, pointerEvents:'none' } : undefined}>
                   {/* Honeypot */}
                   <input
                     type="text" name="url_confirm" value={form.honeypot}
@@ -206,19 +196,19 @@ function EnquiryForm({ selectedPackage }) {
 
                   <div className="pi-field">
                     <label className="pi-label">Full name <span style={{ color:'var(--accent)' }}>*</span></label>
-                    <input className="pi-input" type="text" placeholder="Your name"
+                    <input className="pi-input" type="text" name="name" placeholder="Your name"
                       value={form.name} onChange={e => set('name', e.target.value)} autoComplete="name" />
                   </div>
 
                   <div className="pi-field-row">
                     <div className="pi-field">
                       <label className="pi-label">Email address <span style={{ color:'var(--accent)' }}>*</span></label>
-                      <input className="pi-input" type="email" placeholder="you@example.com"
+                      <input className="pi-input" type="email" name="email" placeholder="you@example.com"
                         value={form.email} onChange={e => set('email', e.target.value)} autoComplete="email" />
                     </div>
                     <div className="pi-field">
                       <label className="pi-label">Phone number <span style={{ color:'var(--accent)' }}>*</span></label>
-                      <input className="pi-input" type="tel" placeholder="+44 7XXX XXXXXX"
+                      <input className="pi-input" type="tel" name="phone" placeholder="+44 7XXX XXXXXX"
                         value={form.phone} onChange={e => set('phone', e.target.value)} autoComplete="tel" />
                       <p className="pi-field-hint">Include your country code.</p>
                     </div>
@@ -230,7 +220,7 @@ function EnquiryForm({ selectedPackage }) {
                         Business name{' '}
                         <span style={{ color:'var(--fg-subtle)', textTransform:'none', letterSpacing:0, fontFamily:'var(--pi-font-sans)' }}>(optional)</span>
                       </label>
-                      <input className="pi-input" type="text" placeholder="Your business name"
+                      <input className="pi-input" type="text" name="businessName" placeholder="Your business name"
                         value={form.business} onChange={e => set('business', e.target.value)} autoComplete="organization" />
                     </div>
                     <div className="pi-field">
@@ -238,7 +228,7 @@ function EnquiryForm({ selectedPackage }) {
                         Package interest{' '}
                         <span style={{ color:'var(--fg-subtle)', textTransform:'none', letterSpacing:0, fontFamily:'var(--pi-font-sans)' }}>(optional)</span>
                       </label>
-                      <select className="pi-input" value={form.pkg} onChange={e => set('pkg', e.target.value)}>
+                      <select className="pi-input" name="packageInterest" value={form.pkg} onChange={e => set('pkg', e.target.value)}>
                         <option value="">Select a package...</option>
                         <option value="Landing Page — £120">Landing Page — £120</option>
                         <option value="3 Page Website — £250">3 Page Website — £250</option>
@@ -250,7 +240,7 @@ function EnquiryForm({ selectedPackage }) {
 
                   <div className="pi-field">
                     <label className="pi-label">Project brief <span style={{ color:'var(--accent)' }}>*</span></label>
-                    <textarea className="pi-input" rows={4}
+                    <textarea className="pi-input" name="projectBrief" rows={4}
                       placeholder="Briefly describe your business and what you need the website to do."
                       value={form.purpose} onChange={e => set('purpose', e.target.value)}
                       style={{ resize:'none' }} />
@@ -264,20 +254,27 @@ function EnquiryForm({ selectedPackage }) {
                     </label>
                   </div>
 
-                  {status === 'error' && errorMsg && (
+                  {status === 'error' && (errorMsg || submitFailed) && (
                     <div className="pi-form-error">
                       <Icon name="alert-circle" size={15} />
-                      <p>{errorMsg}</p>
+                      {submitFailed
+                        ? <p>Something went wrong. Please try again or email{' '}
+                            <a href="mailto:hello@builtbypi.com" style={{ color:'var(--accent)' }}>hello@builtbypi.com</a>
+                            {' '}directly.</p>
+                        : <p>{errorMsg}</p>
+                      }
                     </div>
                   )}
 
-                  <button type="submit" className="pi-btn pi-btn-primary pi-btn-full" style={{ fontSize:15, padding:'14px 20px' }}>
+                  <button type="submit" className="pi-btn pi-btn-primary pi-btn-full"
+                    style={{ fontSize:15, padding:'14px 20px' }}
+                    disabled={status === 'submitting'}>
                     <Icon name="mail" size={17} />
-                    Send enquiry
+                    {status === 'submitting' ? 'Sending…' : 'Send enquiry'}
                   </button>
 
                   <p style={{ textAlign:'center', fontSize:11.5, color:'var(--fg-subtle)', marginTop:12 }}>
-                    This opens your email client with your details pre-filled. Nothing is stored on this site.
+                    Your details are sent securely to pi. Nothing is stored on this site.
                   </p>
                 </form>
               )}
