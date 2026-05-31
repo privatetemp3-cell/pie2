@@ -103,8 +103,8 @@ function Hero({ onStartProject, onSeePackages }) {
             <div className="pi-hero-stats hero-anim hero-anim-4">
               {[
                 { v: '3.14×', l: 'faster than average' },
-                { v: '£650',  l: 'max project price'   },
-                { v: '48h',   l: 'enquiry response'     },
+                { v: '£120',  l: 'projects starting from' },
+                { v: '30min', l: 'enquiry response'     },
               ].map(s => (
                 <div key={s.l} className="pi-hero-stat">
                   <b>{s.v}</b>
@@ -173,7 +173,8 @@ const PACKAGES = [
       'Launch support',
     ],
     cta: 'Choose Curated Site',
-    value: 'Curated Website — £650',
+    value: 'Curated Website — £650 plus',
+    from: true,
     featured: true,
   },
 ];
@@ -196,6 +197,7 @@ function Packages({ onSelectPackage }) {
               <div className={`pi-card pi-pkg-card${pkg.featured ? ' pi-card-featured' : ''}`}>
                 {pkg.featured && <span className="pi-pkg-badge">Most complete</span>}
                 <div className="pi-pkg-price">
+                  {pkg.from && <span className="pi-pkg-from">from</span>}
                   <span className="currency">£</span>
                   <span className="amount">{pkg.price}</span>
                 </div>

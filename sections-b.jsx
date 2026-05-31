@@ -229,7 +229,7 @@ function EnquiryForm({ selectedPackage }) {
                       <option value="" disabled>Select a package...</option>
                       <option value="Landing Page — £120">Landing Page — £120</option>
                       <option value="3 Page Website — £250">3 Page Website — £250</option>
-                      <option value="Curated Website — £650">Curated Website — £650</option>
+                      <option value="Curated Website — £650 plus">Curated Website — £650 plus</option>
                       <option value="Not sure yet">Not sure yet</option>
                     </select>
                   </div>
@@ -268,8 +268,9 @@ function EnquiryForm({ selectedPackage }) {
                       <select className="pi-input" value={form.timeframe} onChange={e => set('timeframe', e.target.value)}>
                         <option value="" disabled>Select...</option>
                         <option value="As soon as possible">As soon as possible</option>
-                        <option value="Within 1 month">Within 1 month</option>
-                        <option value="Within 2–3 months">Within 2–3 months</option>
+                        <option value="7 days">7 days</option>
+                        <option value="2 weeks">2 weeks</option>
+                        <option value="1 month">1 month</option>
                         <option value="No fixed deadline">No fixed deadline</option>
                       </select>
                     </div>

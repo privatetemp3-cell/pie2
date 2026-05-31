@@ -235,7 +235,8 @@ button{font-family:var(--pi-font-sans);cursor:pointer;border:none;background:non
   border:1px solid var(--border-accent);border-radius:var(--pi-r-pill);
   padding:3px 10px;margin-bottom:14px;
 }
-.pi-pkg-price{margin-bottom:10px}
+.pi-pkg-price{margin-bottom:10px;display:flex;align-items:baseline;gap:2px}
+.pi-pkg-from{font-family:var(--pi-font-sans);font-size:13px;font-weight:500;color:var(--fg-muted);margin-right:4px;align-self:center}
 .pi-pkg-price .currency{font-family:var(--pi-font-mono);font-size:28px;font-weight:700;color:var(--accent);vertical-align:top;margin-top:4px;display:inline-block}
 .pi-pkg-price .amount{font-family:var(--pi-font-mono);font-size:44px;font-weight:700;color:var(--fg-strong)}
 .pi-pkg-name{font-family:var(--pi-font-display);font-size:19px;font-weight:600;color:var(--fg-strong);margin-bottom:10px}
