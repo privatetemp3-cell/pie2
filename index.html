@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pi — Precision-built websites</title>
+  <meta name="description" content="Premium web design for ambitious businesses. Landing pages, 3-page websites and curated websites built for speed, clarity and conversion." />
+  <meta property="og:title" content="pi — Precision-built websites" />
+  <meta property="og:description" content="Premium web design for ambitious businesses. Built for speed, clarity and conversion." />
+  <meta property="og:url" content="https://builtbypi.com" />
+  <meta property="og:site_name" content="pi" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="pi — Precision-built websites" />
+  <meta name="twitter:description" content="Premium web design for ambitious businesses. Built for speed, clarity and conversion." />
+
+  <!-- WhatsApp number (edit here to change) -->
+  <meta name="wa-number" content="447502116497" />
+
+  <link rel="icon" href="pi-favicon.svg" />
+  <link rel="stylesheet" href="colors_and_type.css" />
+  <link rel="stylesheet" href="styles.css" />
+
+  <!-- React 18 -->
+  <script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin></script>
+  <!-- Babel (JSX in browser) -->
+  <script src="https://unpkg.com/@babel/standalone@7.25.9/babel.min.js" crossorigin></script>
+  <!-- Lucide icons -->
+  <script src="https://unpkg.com/lucide@0.511.0/dist/umd/lucide.min.js" crossorigin></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" src="primitives.jsx"></script>
+<script type="text/babel" src="reveal.jsx"></script>
+<script type="text/babel" src="chrome.jsx"></script>
+<script type="text/babel" src="sections-a.jsx"></script>
+<script type="text/babel" src="sections-b.jsx"></script>
+
+<script type="text/babel">
+function App() {
+  const [selectedPackage, setSelectedPackage] = React.useState('');
+  const formRef   = React.useRef(null);
+  const pkgsRef   = React.useRef(null);
+
+  const scrollToForm = (pkg) => {
+    if (pkg) setSelectedPackage(pkg);
+    if (formRef.current) formRef.current.scrollIntoView({ behavior:'smooth', block:'start' });
+  };
+
+  const scrollToPkgs = () => {
+    if (pkgsRef.current) pkgsRef.current.scrollIntoView({ behavior:'smooth', block:'start' });
+  };
+
+  return (
+    <>
+      <RevealObserver />
+      <Header onContactClick={() => scrollToForm()} />
+      <main>
+        <Hero onStartProject={() => scrollToForm()} onSeePackages={scrollToPkgs} />
+        <div ref={pkgsRef}>
+          <Packages onSelectPackage={scrollToForm} />
+        </div>
+        <Process />
+        <WhyPi />
+        <div ref={formRef}>
+          <EnquiryForm selectedPackage={selectedPackage} />
+        </div>
+        <FAQ />
+      </main>
+      <Footer onContactClick={() => scrollToForm()} />
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

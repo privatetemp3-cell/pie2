@@ -1,0 +1,76 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap');
+
+:root {
+  --pi-font-display: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+  --pi-font-sans:    'Geist', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --pi-font-mono:    'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  --pi-navy-950: #060D15;
+  --pi-navy-900: #071421;
+  --pi-navy-850: #0A1A2A;
+  --pi-navy-800: #0E2233;
+  --pi-navy-700: #15314A;
+  --pi-navy-600: #1E435F;
+
+  --pi-blue-300: #5BA8FF;
+  --pi-blue-400: #087BFF;
+  --pi-blue-500: #2B6CF2;
+  --pi-blue-600: #1F4CA6;
+
+  --pi-white:    #FFFFFF;
+  --pi-soft:     #F5F7FA;
+  --pi-grey-400: #8A93A3;
+  --pi-grey-500: #5A6573;
+  --pi-grey-600: #3A4350;
+
+  --pi-blue-tint:   rgba(8,123,255,0.10);
+  --pi-blue-tint-2: rgba(8,123,255,0.18);
+  --pi-glow: 0 0 0 1px rgba(8,123,255,0.35), 0 10px 40px -8px rgba(8,123,255,0.45);
+  --pi-glow-sm: 0 0 0 1px rgba(8,123,255,0.25), 0 4px 20px -4px rgba(8,123,255,0.30);
+
+  --pi-text-display: clamp(2.6rem, 5vw, 3.8rem);
+  --pi-text-h1: clamp(2rem, 4vw, 3rem);
+  --pi-text-h2: clamp(1.6rem, 3vw, 2.2rem);
+  --pi-text-h3: 1.375rem;
+  --pi-text-lg: 1.125rem;
+  --pi-text-base: 1rem;
+  --pi-text-sm: 0.875rem;
+  --pi-text-xs: 0.75rem;
+  --pi-text-eyebrow: 0.75rem;
+
+  --pi-section: clamp(72px, 9vw, 128px);
+  --pi-gutter:  clamp(20px, 5vw, 48px);
+  --pi-maxw:    1200px;
+
+  --pi-r-sm:   6px;
+  --pi-r-md:   10px;
+  --pi-r-lg:   14px;
+  --pi-r-xl:   20px;
+  --pi-r-pill: 999px;
+
+  --pi-shadow-md: 0 8px 24px -8px rgba(3,8,15,0.45);
+  --pi-shadow-lg: 0 24px 60px -16px rgba(3,8,15,0.60);
+
+  --pi-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --pi-dur:  240ms;
+  --pi-dur-fast: 140ms;
+
+  /* Semantic */
+  --bg:            var(--pi-navy-950);
+  --bg-elevated:   var(--pi-navy-900);
+  --surface:       var(--pi-navy-850);
+  --surface-2:     var(--pi-navy-800);
+  --surface-hover: var(--pi-navy-700);
+  --border:        rgba(255,255,255,0.08);
+  --border-strong: rgba(255,255,255,0.16);
+  --border-accent: rgba(8,123,255,0.45);
+  --fg:            var(--pi-soft);
+  --fg-strong:     var(--pi-white);
+  --fg-muted:      var(--pi-grey-400);
+  --fg-subtle:     var(--pi-grey-500);
+  --accent:        var(--pi-blue-400);
+  --accent-hover:  var(--pi-blue-300);
+  --accent-press:  var(--pi-blue-500);
+  --grid-line:     rgba(255,255,255,0.04);
+  --focus-ring:    0 0 0 3px rgba(8,123,255,0.35);
+}
