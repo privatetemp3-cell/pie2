@@ -103,7 +103,7 @@ function Hero({ onStartProject, onSeePackages }) {
             <div className="pi-hero-stats hero-anim hero-anim-4">
               {[
                 { v: '3.14×', l: 'faster than average' },
-                { v: '£120',  l: 'projects starting from' },
+                { v: '£250',  l: 'projects starting from' },
                 { v: '30min', l: 'enquiry response'     },
               ].map(s => (
                 <div key={s.l} className="pi-hero-stat">
@@ -128,7 +128,7 @@ function Hero({ onStartProject, onSeePackages }) {
 const PACKAGES = [
   {
     name: 'Landing Page',
-    price: '120',
+    price: '250',
     tagline: 'A sharp one-page site for a clear offer, campaign, personal brand or local business.',
     includes: [
       'One-page responsive website',
@@ -139,12 +139,12 @@ const PACKAGES = [
       'Fast turnaround',
     ],
     cta: 'Choose Landing Page',
-    value: 'Landing Page — £120',
+    value: 'Landing Page — £250',
     featured: false,
   },
   {
     name: '3 Page Website',
-    price: '250',
+    price: '350',
     tagline: 'A simple business website with the key pages needed to look credible and start converting.',
     includes: [
       'Home page',
@@ -155,12 +155,12 @@ const PACKAGES = [
       'Basic SEO structure',
     ],
     cta: 'Choose 3 Pages',
-    value: '3 Page Website — £250',
+    value: '3 Page Website — £350',
     featured: false,
   },
   {
     name: 'Curated Website',
-    price: '650',
+    price: '799',
     tagline: 'A more complete website for businesses that need stronger positioning, better structure and a more premium finish.',
     includes: [
       'Custom page structure',
@@ -173,7 +173,7 @@ const PACKAGES = [
       'Launch support',
     ],
     cta: 'Choose Curated Site',
-    value: 'Curated Website — £650',
+    value: 'Curated Website — £799',
     from: true,
     featured: true,
   },

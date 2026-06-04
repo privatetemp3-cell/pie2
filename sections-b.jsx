@@ -127,7 +127,7 @@ function EnquiryForm({ selectedPackage }) {
         setSubmitFailed(true);
         setStatus('error');
       }
-    } catch {
+    } catch (e) {
       setSubmitFailed(true);
       setStatus('error');
     }
@@ -230,9 +230,9 @@ function EnquiryForm({ selectedPackage }) {
                       </label>
                       <select className="pi-input" name="packageInterest" value={form.pkg} onChange={e => set('pkg', e.target.value)}>
                         <option value="">Select a package...</option>
-                        <option value="Landing Page — £120">Landing Page — £120</option>
-                        <option value="3 Page Website — £250">3 Page Website — £250</option>
-                        <option value="Curated Website — £650">Curated Website — £650</option>
+                        <option value="Landing Page — £250">Landing Page — £250</option>
+                        <option value="3 Page Website — £350">3 Page Website — £350</option>
+                        <option value="Curated Website — £799">Curated Website — £799</option>
                         <option value="Not sure yet">Not sure yet</option>
                       </select>
                     </div>
@@ -294,7 +294,7 @@ function FAQ() {
       a:'Simple projects can move quickly once the content, structure and requirements are clear. The final timeframe is confirmed after the discovery call.' },
     { q:'Do I need to know exactly what I want?',
       a:"No. You can send a short description of your business and what the website needs to do. We'll help shape the structure." },
-    { q:'What is included in the £120 landing page?',
+    { q:'What is included in the £250 landing page?',
       a:'A responsive one-page website with clear sections, mobile optimisation, a contact flow and basic SEO structure.' },
     { q:'What is the difference between the 3 Page Website and the Curated Website?',
       a:'The 3 Page Website is for businesses that need a simple, credible online presence. The Curated Website is for businesses that need stronger positioning, more structure and a more premium finish.' },
