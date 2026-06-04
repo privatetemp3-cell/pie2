@@ -144,7 +144,7 @@ const PACKAGES = [
   },
   {
     name: '3 Page Website',
-    price: '350',
+    price: '450',
     tagline: 'A simple business website with the key pages needed to look credible and start converting.',
     includes: [
       'Home page',
@@ -155,7 +155,7 @@ const PACKAGES = [
       'Basic SEO structure',
     ],
     cta: 'Choose 3 Pages',
-    value: '3 Page Website — £350',
+    value: '3 Page Website — £450',
     featured: false,
   },
   {

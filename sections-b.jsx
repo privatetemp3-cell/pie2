@@ -231,7 +231,7 @@ function EnquiryForm({ selectedPackage }) {
                       <select className="pi-input" name="packageInterest" value={form.pkg} onChange={e => set('pkg', e.target.value)}>
                         <option value="">Select a package...</option>
                         <option value="Landing Page — £250">Landing Page — £250</option>
-                        <option value="3 Page Website — £350">3 Page Website — £350</option>
+                        <option value="3 Page Website — £450">3 Page Website — £450</option>
                         <option value="Curated Website — £799">Curated Website — £799</option>
                         <option value="Not sure yet">Not sure yet</option>
                       </select>
